@@ -45,7 +45,7 @@ void DFSRec(struct AdjList adj[], int visited[], int s) {
     visited[s] = 1;
 
     // Imprimir el nodo actual
-    printf("%d ", s);
+    // printf("%d ", s);
 
     // Pasar por los nodos que no han sido visitados
     struct Node* current = adj[s].head;                 // buscar el nodo actual en la lista
@@ -75,6 +75,17 @@ int* DFS(struct AdjList adj[], int V, int s) {
     }
 
     DFSRec(adj, visited, s);
+
+    // Liberar memoria
+
+    for (int i = 0; i < V; i++) {
+        struct Node* current = adj[i].head;
+        while (current != NULL) {
+            struct Node* temp = current;
+            current = current->next;
+            free(temp);
+        }
+    }
 
     return visited;
 }
@@ -178,21 +189,33 @@ int exec_DFS(int nodos, int* sizes, int** array, int source){
     }
     
 
-    // 
+    
     for (int i = 0; i < E; i++) {
         addEdge(adj, edges[i][0], edges[i][1]);
     }
 
-    printf("DFS from source: %d\n", source);
-    DFS(adj, V, source);
+    // printf("DFS from source: %d\n", source);
 
-    
+    int* visited = DFS(adj, V, source);
+
+    int conexo = 1;
+    for(int i = 0; i < V; i++){ 
+        if (visited[i] == 0) {
+            conexo = 0;
+            break;
+        }
+    }
+
+
+    // Liberar memoria
+    free(visited);
+
     for(int i = 0; i < malloc_size; i++){ 
         free(edges[i]);
     }
     free(edges);
 
-    return 0;
+    return conexo;
 }
 
 int main() {
@@ -226,6 +249,11 @@ int main() {
     }
 
     int source = 0;
-    exec_DFS(5, sizes, array, source);
+    printf("conexo?: %d", exec_DFS(5, sizes, array, source));
+
+    for(int i = 0; i < 5; i++){ 
+        free(array[i]);
+    }
+    free(array);
     return 0;
 }
