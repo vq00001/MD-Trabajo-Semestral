@@ -217,7 +217,7 @@ int exec_DFS(int nodos, int* sizes, int** array, int source){
 
     return conexo;
 }
-
+/*
 int main() {
     int sizes[5] = {2, 3, 2, 1, 0};
 
@@ -257,3 +257,4 @@ int main() {
     free(array);
     return 0;
 }
+*/

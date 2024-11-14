@@ -140,7 +140,7 @@ int **createArray(char **lines, int numLines, int *n, int **sizes) {
 
     return array;
 }
-
+/*
 int main() {
     const char *filename = "../ejemplo.csv";  // Nombre del archivo a leer
     char *content = readFile(filename);
@@ -185,4 +185,4 @@ int main() {
     }
 
     return 0;
-}
+}*/
