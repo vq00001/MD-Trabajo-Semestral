@@ -157,10 +157,10 @@ int** format_input(int nodos, int* sizes, int** array, int* E, int* malloc_size_
             } 
         }
     }
-    for (int i = 0; i < edge_counter; ++i)
-    {
-       printf("(%d.. %d)  ",edges[i][0], edges[i][1]);
-    }
+    // for (int i = 0; i < edge_counter; ++i)
+    // {
+    //    printf("(%d.. %d)  ",edges[i][0], edges[i][1]);
+    // }
     (*malloc_size_ptr) = edges_size; // guardar el tamaño del arreglo de aristas para liberar la memoria despues
 (*E) = edge_counter;                 // guardar la cantidad de aristas  
 
@@ -173,7 +173,7 @@ int** format_input(int nodos, int* sizes, int** array, int* E, int* malloc_size_
 * @param sizes Cantidad de nodos adyacentes
 * @param array Nodos adyacentes
 * @param source Nodo de inicio
-* @return Arreglo de nodos visitados
+* @return 1 si el grafo es conexo, 0 si no lo es
 */ 
 
 
@@ -206,6 +206,7 @@ int isConexo(int nodos, int* sizes, int** array, int source){
     int* visited = DFS(adj, V, source);
 
     int conexo = 1;
+    
     for(int i = 0; i < V; i++){ 
         if (visited[i] == 0) {
             conexo = 0;
