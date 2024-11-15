@@ -6,19 +6,34 @@
 #include <stdbool.h>
 
 
-
+void imprimirGrafo(int** grafo, int* sizes, int numVertices){
+	for (int i = 0; i < numVertices ; ++i){
+		printf("%d:  ",i+1);
+		for (int j = 0; j < sizes[i]; ++j){
+			printf("%d  ",grafo[i][j]);
+		}
+		printf("\n");
+	}
+}
 
 bool conexoSinVertices(int** grafo, int vertices[],int cant,int numVertices, int sizes[]){
 	int aux[numVertices];
 	for (int i = 0,j = 0; i < numVertices; ++i){
-		if(i == vertices[j]){
+		if(i+1 == vertices[j]){
 			aux[i] = 1;
 			j++;
 		}
 		else{
 			aux[i] = -j;
 		}
+		printf("%d ", aux[i]);
 	}
+	printf("vertices quitados: \n");
+	for (int i = 0; i < cant; ++i)
+	{
+		printf("%d ", vertices[i]);
+	}
+	printf("\n");
 	int resago=0;
 	int resago2 = 0;
 	int newSizes[numVertices-cant];
@@ -31,20 +46,29 @@ bool conexoSinVertices(int** grafo, int vertices[],int cant,int numVertices, int
 			resago++;
 			continue;
 		}
+		resago2= 0;
 		newGrafo[i-resago] = (int*)malloc(sizes[i]*sizeof(int));
 		for (int j = 0; j < sizes[i]; ++j){
-			if(aux[grafo[i][j]] == 1){
+			if(aux[grafo[i][j]-1] == 1){
 				resago2++;
 				continue;
 			}
-			newGrafo[i-resago][j-resago2] = grafo[i][j] + aux[grafo[i][j]];
+			newGrafo[i-resago][j-resago2] = grafo[i][j] + aux[grafo[i][j]-1];
 			newSizes[i-resago]++;
 		}
 	}
+	for (int i = 0; i < numVertices ; ++i)
+	{
+		printf("%d ", newSizes[i] );
+	}
+	printf("\n");
+	imprimirGrafo(newGrafo,newSizes,numVertices-cant);
 	if (exec_DFS(numVertices-cant,newSizes,newGrafo,0) == 0){
+		printf("hasta aca llegue\n");
 		liberarMatriz(newGrafo,numVertices-cant);
 		return false;
 	}
+	printf("o hasta aca quiza\n");
 	liberarMatriz(newGrafo,numVertices-cant);
 	return true;
 
@@ -77,6 +101,8 @@ int main(int argc, char const *argv[]){
             int *sizes = NULL;  // Array para almacenar los tamaños de cada subarreglo
             int **array = createArray(lines, numLines, &n, &sizes);
             printf("llegue a salvo\n");
+            if(kConexo(array,1,n,sizes)) printf("llegue a salvooooo\n");
+            printf("no fui conexo pipipi\n");
         }
     }
 
