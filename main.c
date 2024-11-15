@@ -63,7 +63,7 @@ bool conexoSinVertices(int** grafo, int vertices[],int cant,int numVertices, int
 	}
 	printf("\n");
 	imprimirGrafo(newGrafo,newSizes,numVertices-cant);
-	if (exec_DFS(numVertices-cant,newSizes,newGrafo,0) == 0){
+	if (isConexo(numVertices-cant,newSizes,newGrafo,0) == 0){
 		printf("no fue conexo\n");
 		liberarMatriz(newGrafo,numVertices-cant);
 		return false;
@@ -107,7 +107,7 @@ int main(int argc, char const *argv[]){
             clock_t start_time = clock();
             if(kConexo(array,k,n,sizes)) printf("soy %d-conexo!\n",k+1 );
             else printf("no fui conexo pipipi\n");
-            if(exec_DFS(n,sizes,array,0)==0) printf(" grafooo original no conexo\n");
+            if(isConexo(n,sizes,array,0)==0) printf(" grafooo original no conexo\n");
             clock_t end_time = clock();
             double time_spent = (double)(end_time - start_time) / CLOCKS_PER_SEC;
             printf("Tiempo de ejecución: %f segundos\n", time_spent);

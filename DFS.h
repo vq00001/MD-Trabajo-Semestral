@@ -28,6 +28,6 @@ void addEdge(struct AdjList adj[], int e, int v);
 
 int** format_input(int nodos, int* sizes, int** array, int* E, int* malloc_size_ptr);
 
-int exec_DFS(int nodos, int* sizes, int** array, int source);
+int isConexo(int nodos, int* sizes, int** array, int source);
 
 #endif

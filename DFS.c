@@ -177,7 +177,7 @@ int** format_input(int nodos, int* sizes, int** array, int* E, int* malloc_size_
 */ 
 
 
-int exec_DFS(int nodos, int* sizes, int** array, int source){
+int isConexo(int nodos, int* sizes, int** array, int source){
     int V = nodos; // cant nodos
     int E = 0; // cant aristas
     int malloc_size = 0; // tamaño de la memoria alocada para edges
