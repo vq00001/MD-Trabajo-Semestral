@@ -139,7 +139,7 @@ int** format_input(int nodos, int* sizes, int** array, int* E, int* malloc_size_
                     // agregar arista al arreglo de aristas
                     
                     edges[edge_counter][0] = i;
-                    edges[edge_counter][1] = array[i][j];
+                    edges[edge_counter][1] = array[i][j]-1;
                     edge_counter++;
 
                     if (edge_counter >= (edges_size)) {
@@ -157,7 +157,10 @@ int** format_input(int nodos, int* sizes, int** array, int* E, int* malloc_size_
             } 
         }
     }
-
+    for (int i = 0; i < edge_counter; ++i)
+    {
+       printf("(%d.. %d)  ",edges[i][0], edges[i][1]);
+    }
     (*malloc_size_ptr) = edges_size; // guardar el tamaño del arreglo de aristas para liberar la memoria despues
 (*E) = edge_counter;                 // guardar la cantidad de aristas  
 
@@ -180,6 +183,12 @@ int exec_DFS(int nodos, int* sizes, int** array, int source){
     int malloc_size = 0; // tamaño de la memoria alocada para edges
     int** edges = format_input(nodos, sizes, array, &E, &malloc_size);
 
+    if(1 < nodos){
+        for (int i = 0; i < nodos ; ++i)
+        {
+           if (sizes[i] == 0) return 0;
+        }
+    }
 
     struct AdjList adj[V];
 

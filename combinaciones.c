@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+long long factSimpl(int a, int b){
+	if(a==b)return 1;
+	return a*factSimpl(a-1,b);
+}
 
-int fact(int a){
+long long fact(int a){
     if(a==1) return 1;
     return a*fact(a-1);
 
@@ -14,11 +18,15 @@ void liberarMatriz(int** matriz, int filas) {
 }
 
 int numCombinaciones(int cantPorGrupo,int total){
-    int n = fact(total);
-    printf("%d\n",n );
-    int m = fact(cantPorGrupo) * fact(total-cantPorGrupo);
-    printf("%d\n",m);
-    return n/m;
+	int n;
+	if (cantPorGrupo > total-cantPorGrupo){
+		n = factSimpl(total,cantPorGrupo);
+		return n/fact(total-cantPorGrupo);
+	}
+	else {
+		n = factSimpl(total,total-cantPorGrupo);
+		return n/fact(cantPorGrupo);
+	}
 }
 
 

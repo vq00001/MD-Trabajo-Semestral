@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
+#include <time.h>
 
 void imprimirGrafo(int** grafo, int* sizes, int numVertices){
 	for (int i = 0; i < numVertices ; ++i){
@@ -64,7 +64,7 @@ bool conexoSinVertices(int** grafo, int vertices[],int cant,int numVertices, int
 	printf("\n");
 	imprimirGrafo(newGrafo,newSizes,numVertices-cant);
 	if (exec_DFS(numVertices-cant,newSizes,newGrafo,0) == 0){
-		printf("hasta aca llegue\n");
+		printf("no fue conexo\n");
 		liberarMatriz(newGrafo,numVertices-cant);
 		return false;
 	}
@@ -78,7 +78,7 @@ bool kConexo(int** grafo,int k, int numVertices, int* sizes){
 	int numComb = numCombinaciones(k,numVertices);
     int** m = encontrarCombinaciones( numVertices, k,numComb);
     for (int i = 0; i < numComb ; ++i){
-    	if (conexoSinVertices(grafo,m[i],k,numVertices,sizes)){
+    	if (!conexoSinVertices(grafo,m[i],k,numVertices,sizes)){
     		return false;
     	}
     }
@@ -101,8 +101,16 @@ int main(int argc, char const *argv[]){
             int *sizes = NULL;  // Array para almacenar los tamaños de cada subarreglo
             int **array = createArray(lines, numLines, &n, &sizes);
             printf("llegue a salvo\n");
-            if(kConexo(array,1,n,sizes)) printf("llegue a salvooooo\n");
-            printf("no fui conexo pipipi\n");
+            int k;
+            printf("Ingrese k:\n");
+            scanf("%d",&k);
+            clock_t start_time = clock();
+            if(kConexo(array,k,n,sizes)) printf("soy %d-conexo!\n",k+1 );
+            else printf("no fui conexo pipipi\n");
+            if(exec_DFS(n,sizes,array,0)==0) printf(" grafooo original no conexo\n");
+            clock_t end_time = clock();
+            double time_spent = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+            printf("Tiempo de ejecución: %f segundos\n", time_spent);
         }
     }
 
