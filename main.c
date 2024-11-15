@@ -6,6 +6,12 @@
 #include <stdbool.h>
 #include <time.h>
 
+/**
+ * Funcion para imprimir un grafo
+ * @param grafo Matriz de adyacencia
+ * @param sizes Tamaños de los subarreglos
+ * @param numVertices Cantidad de vertices
+ */
 void imprimirGrafo(int** grafo, int* sizes, int numVertices){
 	for (int i = 0; i < numVertices ; ++i){
 		printf("%d:  ",i+1);
@@ -16,6 +22,13 @@ void imprimirGrafo(int** grafo, int* sizes, int numVertices){
 	}
 }
 
+/**
+ * Funcion para evaluar la conectividad de un grafo sin un conjunto de vertices
+ * @param grafo Matriz de adyacencia
+ * @param vertices Vertices a quitar
+ * @param numVertices Cantidad de vertices
+ * @param sizes Tamaños de los subarreglos
+ */
 bool conexoSinVertices(int** grafo, int vertices[],int cant,int numVertices, int sizes[]){
 	int aux[numVertices];
 	for (int i = 0,j = 0; i < numVertices; ++i){
@@ -79,6 +92,14 @@ bool conexoSinVertices(int** grafo, int vertices[],int cant,int numVertices, int
 
 }
 
+/**
+ * Funcion para evaluar la conectividad de un grafo
+ * @param grafo Matriz de adyacencia
+ * @param k Numero de vertices a quitar
+ * @param numVertices Cantidad de vertices
+ * @param sizes Tamaños de los subarreglos
+ */
+
 bool kConexo(int** grafo,int k, int numVertices, int* sizes){
 	int numComb = numCombinaciones(k,numVertices);
     int** m = encontrarCombinaciones( numVertices, k,numComb);
@@ -91,6 +112,11 @@ bool kConexo(int** grafo,int k, int numVertices, int* sizes){
 
 }
 
+
+/**
+ * Funcion para llamar a la funcion que evalua la conectividad de un grafo 
+ * @param filename Nombre del archivo a leer
+ */
 
 void evaluar_conectividad(const char* filename){
 
@@ -127,6 +153,11 @@ void evaluar_conectividad(const char* filename){
     }
 
 }
+
+/**
+ * Funcion para evaluar la conexidad de un grafo
+ * @param filename Nombre del archivo a leer 
+*/
 
 void evaluar_conexidad(const char* filename){
 
@@ -166,6 +197,61 @@ void evaluar_conexidad(const char* filename){
 }
 
 
+/**
+ * Funcion para calcular el grado minimo o maximo de un grafo
+ * @param filename Nombre del archivo a leer 
+ * @param min 1 para minimo, 0 para maximo
+*/
+void calc_grado_minimo_maximo(const char* filename, int min){ 
+
+
+	char *content = readFile(filename);
+
+    if (content != NULL) {
+
+        printf("\nContenido:\n%s\n", content);  // Mostrar contenido del archivo (Solo para pruebas)
+	
+        int numLines;
+        char **lines = splitLines(content, &numLines); 	// Dividir el contenido del archivo en líneas
+
+        if (lines != NULL) {
+            int n;
+            int *sizes = NULL;  // Array para almacenar los tamaños de cada subarreglo
+            int **array = createArray(lines, numLines, &n, &sizes); // Crear el array de adyacencia
+			
+    
+			// inciar el reloj para calcular el tiempo de ejecución
+            clock_t start_time = clock();
+			
+			int minimo = sizes[0];
+			int maximo = sizes[0];
+
+			for(int i = 0; i < n; i++) {
+				
+				if (sizes[i] < minimo) {
+					minimo = sizes[i];
+
+				} else if (sizes[i] > maximo) {
+					maximo = sizes[i];
+				}
+			}
+
+            clock_t end_time = clock();
+            double time_spent = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+
+
+			if (min == 1) printf("\nGrado minimo del grafo: %d\n", minimo);
+			else printf("\nGrado maximo del grafo: %d\n", maximo);
+
+			printf("--------------------\n");
+            printf("<Tiempo de ejecucion: %f segundos>\n\n", time_spent);
+			
+		}
+	}
+}
+
+
+
 int main(int argc, char const *argv[]){
 
 
@@ -179,7 +265,13 @@ int main(int argc, char const *argv[]){
 	int opcion;
 	scanf("%d",&opcion);
 
+	if (opcion < 1 || opcion > 4) {
+		printf("Opcion no valida\n");
+		return 0;
+	}
+
     for (int i = 1; i < argc; i++) {
+
 		printf("\n############ %s ############\n", argv[i]);
 
 		switch(opcion){
@@ -190,10 +282,10 @@ int main(int argc, char const *argv[]){
 				evaluar_conexidad(argv[i]);
 				break;
 			case 3:
-				printf("Calcular grado maximo\n");
+				calc_grado_minimo_maximo(argv[i], 0);
 				break;
 			case 4:
-				printf("Calcular grado minimo\n");
+				calc_grado_minimo_maximo(argv[i], 1);
 				break;
 			default:
 				printf("Opcion no valida\n");
