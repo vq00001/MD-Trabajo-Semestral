@@ -100,9 +100,12 @@ bool conexoSinVertices(int** grafo, int vertices[],int cant,int numVertices, int
  * @param sizes Tamaños de los subarreglos
  */
 
-bool kConexo(int** grafo,int k, int numVertices, int* sizes){
+bool kConexo(int** grafo, int k, int numVertices, int* sizes){
+
+
 	int numComb = numCombinaciones(k,numVertices);
-    int** m = encontrarCombinaciones( numVertices, k,numComb);
+    int** m = encontrarCombinaciones(numVertices, k, numComb);
+
     for (int i = 0; i < numComb ; ++i){
     	if (!conexoSinVertices(grafo,m[i],k,numVertices,sizes)){
     		return false;
@@ -141,8 +144,8 @@ void evaluar_conectividad(const char* filename){
 			// inciar el reloj para calcular el tiempo de ejecución
             clock_t start_time = clock();
 
-			if(kConexo(array,k,n,sizes)) printf("soy %d-conexo!\n", k+1 );
-            else printf("El grafo no es %d-conexo.\n", k + 1);
+			if(kConexo(array,k - 1,n,sizes)) printf("soy %d-conexo!\n", k);
+            else printf("El grafo no es %d-conexo.\n", k);
 
             clock_t end_time = clock();
             double time_spent = (double)(end_time - start_time) / CLOCKS_PER_SEC;
