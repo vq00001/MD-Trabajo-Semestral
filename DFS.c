@@ -188,8 +188,6 @@ int exec_DFS(int nodos, int* sizes, int** array, int source){
         adj[i].head = NULL;
     }
     
-
-    
     for (int i = 0; i < E; i++) {
         addEdge(adj, edges[i][0], edges[i][1]);
     }
