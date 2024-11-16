@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include <string.h>
 
 /**
  * Funcion para imprimir un grafo
@@ -101,9 +102,10 @@ bool conexoSinVertices(int** grafo, int vertices[],int cant,int numVertices, int
  */
 
 bool kConexo(int** grafo, int k, int numVertices, int* sizes){
-
+	if (k ==  0) return true;
 	int numComb;
     int** m ;
+    if (isConexo(numVertices,sizes,grafo,0)==0) return false;
     for (int i = 1; i < k	; ++i)   {
     	numComb = numCombinaciones(i,numVertices);
         m = encontrarCombinaciones(numVertices, i, numComb);
@@ -116,7 +118,14 @@ bool kConexo(int** grafo, int k, int numVertices, int* sizes){
     }
     return true;
 }
-
+int buscarConectividad(int** grafo,  int numVertices, int* sizes){
+	for (int i = 0; i < numVertices; ++i)
+	{
+		if(!kConexo(grafo,i,numVertices,sizes)){
+			return i-1;
+		}
+	}
+}
 
 /**
  * Funcion para llamar a la funcion que evalua la conectividad de un grafo 
@@ -124,6 +133,40 @@ bool kConexo(int** grafo, int k, int numVertices, int* sizes){
  */
 
 void evaluar_conectividad(const char* filename){
+
+	char *content = readFile(filename);
+
+    if (content != NULL) {
+
+        printf("\nContenido:\n%s\n", content);  // Mostrar contenido del archivo (Solo para pruebas)
+	
+        int numLines;
+        char **lines = splitLines(content, &numLines); 	// Dividir el contenido del archivo en líneas
+
+        if (lines != NULL) {
+            int n;
+            int *sizes = NULL;  // Array para almacenar los tamaños de cada subarreglo
+            int **array = createArray(lines, numLines, &n, &sizes); // Crear el array de adyacencia
+    		
+	    		// inciar el reloj para calcular el tiempo de ejecución
+	        clock_t start_time = clock();
+
+				printf("Mi conectividad	es %d!\n", buscarConectividad(array,n,sizes));
+	         
+
+	        clock_t end_time = clock();
+	        double time_spent = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+
+			printf("--------------------\n");
+	        printf("<Tiempo de ejecucion: %f segundos>\n\n", time_spent);
+    		
+		
+        }
+    }
+
+}
+
+void consultarKConexo(const char* filename){
 
 	char *content = readFile(filename);
 
@@ -149,6 +192,7 @@ void evaluar_conectividad(const char* filename){
 
 				if(kConexo(array,k ,n,sizes)) printf("soy %d-conexo!\n", k);
 	            else printf("El grafo no es %d-conexo.\n", k);
+	           
 
 	            clock_t end_time = clock();
 	            double time_spent = (double)(end_time - start_time) / CLOCKS_PER_SEC;
@@ -239,7 +283,8 @@ void calc_grado_minimo_maximo(const char* filename, int min){
 				if (sizes[i] < minimo) {
 					minimo = sizes[i];
 
-				} else if (sizes[i] > maximo) {
+				}
+				if (sizes[i] > maximo) {
 					maximo = sizes[i];
 				}
 			}
@@ -269,6 +314,7 @@ int main(int argc, char const *argv[]){
 		printf(" 2) Evaluar conexidad\n");
 		printf(" 3) Calcular grado maximo\n");
 		printf(" 4) Calcular grado minimo\n");
+		printf(" 5) Consultar por k conexidad\n");	
 		printf(" Escriba 'exit' o 'return' para salir\n");
 
 		char input[10];
@@ -281,7 +327,7 @@ int main(int argc, char const *argv[]){
 
 		int opcion = atoi(input);
 
-		if (opcion < 1 || opcion > 4) {
+		if (opcion < 1 || opcion > 5) {
 			printf("Opción no válida\n");
 			continue;
 		}
@@ -301,6 +347,9 @@ int main(int argc, char const *argv[]){
 					break;
 				case 4:
 					calc_grado_minimo_maximo(argv[i], 1);
+					break;
+				case 5: 
+					consultarKConexo(argv[i]);
 					break;
 				default:
 					printf("Opcion no valida, para salir escriba exit\n");
