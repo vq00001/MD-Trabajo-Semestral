@@ -262,45 +262,51 @@ void calc_grado_minimo_maximo(const char* filename, int min){
 
 int main(int argc, char const *argv[]){
 
+	while (1) {
+		printf("                 MENU                  \n");
+		printf("Seleccionar consulta a realizar: \n");
+		printf(" 1) Evaluar conectividad\n");
+		printf(" 2) Evaluar conexidad\n");
+		printf(" 3) Calcular grado maximo\n");
+		printf(" 4) Calcular grado minimo\n");
+		printf(" Escriba 'exit' o 'return' para salir\n");
 
-	printf("                 MENU                  \n");
-	printf("Seleccionar consulta a realizar: \n");
-	printf(" 1) Evaluar conectividad\n");
-	printf(" 2) Evaluar conexidad\n");
-	printf(" 3) Calcular grado maximo\n");
-	printf(" 4) Calcular grado minimo\n");
+		char input[10];
+		scanf("%s", input);
 
-	int opcion;
-	scanf("%d",&opcion);
-
-	if (opcion < 1 || opcion > 4) {
-		printf("Opcion no valida\n");
-		return 0;
-	}
-
-    for (int i = 1; i < argc; i++) {
-
-		printf("\n############ %s ############\n", argv[i]);
-
-		switch(opcion){
-			case 1:
-				evaluar_conectividad(argv[i]);
-				break;
-			case 2:
-				evaluar_conexidad(argv[i]);
-				break;
-			case 3:
-				calc_grado_minimo_maximo(argv[i], 0);
-				break;
-			case 4:
-				calc_grado_minimo_maximo(argv[i], 1);
-				break;
-			default:
-				printf("Opcion no valida\n");
-				break;
+		if (strcmp(input, "exit") == 0 || strcmp(input, "return") == 0) {
+			printf("Saliendo del programa...\n");
+			break;
 		}
 
-	}
+		int opcion = atoi(input);
 
+		if (opcion < 1 || opcion > 4) {
+			printf("Opción no válida\n");
+			continue;
+		}
+
+		for (int i = 1; i < argc; i++) {
+			printf("\n############ %s ############\n", argv[i]);
+
+			switch (opcion) {
+				case 1:
+					evaluar_conectividad(argv[i]);
+					break;
+				case 2:
+					evaluar_conexidad(argv[i]);
+					break;
+				case 3:
+					calc_grado_minimo_maximo(argv[i], 0);
+					break;
+				case 4:
+					calc_grado_minimo_maximo(argv[i], 1);
+					break;
+				default:
+					printf("Opcion no valida, para salir escriba exit\n");
+					break;
+			}
+		}
+	}
 	return 0;
 }
