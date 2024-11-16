@@ -102,17 +102,19 @@ bool conexoSinVertices(int** grafo, int vertices[],int cant,int numVertices, int
 
 bool kConexo(int** grafo, int k, int numVertices, int* sizes){
 
-
-	int numComb = numCombinaciones(k,numVertices);
-    int** m = encontrarCombinaciones(numVertices, k, numComb);
-
-    for (int i = 0; i < numComb ; ++i){
-    	if (!conexoSinVertices(grafo,m[i],k,numVertices,sizes)){
-    		return false;
-    	}
+	int numComb;
+    int** m ;
+    for (int i = 1; i < k	; ++i)   {
+    	numComb = numCombinaciones(i,numVertices);
+        m = encontrarCombinaciones(numVertices, i, numComb);
+        for (int j = 0; j < numComb ; ++j){
+	    	if (!conexoSinVertices(grafo,m[j],i,numVertices,sizes)){
+	    		return false;
+	    	}
+	    }
+	    liberarMatriz(m,numComb);
     }
     return true;
-
 }
 
 
@@ -140,18 +142,21 @@ void evaluar_conectividad(const char* filename){
 
 			printf("\nIngrese el valor de la conexidad a evaluar: k = ");
 			scanf("%d",&k);
-    
-			// inciar el reloj para calcular el tiempo de ejecución
-            clock_t start_time = clock();
+    		if ( k >= n ) printf("	Eso no tendria mucho sentido...\n");
+    		else{
+	    			// inciar el reloj para calcular el tiempo de ejecución
+	            clock_t start_time = clock();
 
-			if(kConexo(array,k - 1,n,sizes)) printf("soy %d-conexo!\n", k);
-            else printf("El grafo no es %d-conexo.\n", k);
+				if(kConexo(array,k ,n,sizes)) printf("soy %d-conexo!\n", k);
+	            else printf("El grafo no es %d-conexo.\n", k);
 
-            clock_t end_time = clock();
-            double time_spent = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+	            clock_t end_time = clock();
+	            double time_spent = (double)(end_time - start_time) / CLOCKS_PER_SEC;
 
-			printf("--------------------\n");
-            printf("<Tiempo de ejecucion: %f segundos>\n\n", time_spent);
+				printf("--------------------\n");
+	            printf("<Tiempo de ejecucion: %f segundos>\n\n", time_spent);
+    		}
+			
         }
     }
 
